@@ -1,0 +1,3 @@
+---
+- name: Monasca agent | Monitor the bind process
+  monasca_agent_plugin: name="bind"

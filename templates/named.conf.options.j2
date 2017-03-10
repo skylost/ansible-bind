@@ -1,0 +1,45 @@
+include "/etc/bind/rndc.key";
+
+options {
+
+    directory "/var/cache/bind";
+    listen-on port 53 { {{ ansible_default_ipv4.address }}; };
+    allow-notify { {{ bind_allow_hosts }} }
+    allow-new-zones yes;
+    dnssec-validation auto;
+    auth-nxdomain no;
+    recursion no;
+    minimal-responses yes;
+
+};
+
+controls {
+  inet {{ ansible_default_ipv4.address }} port 953 allow { 0.0.0.0/0; } keys { "rndc-key"; };
+};
+
+logging {
+        channel update_debug {
+                file "/var/log/bind/updates.log" versions 10 size 10M;
+                severity dynamic;
+                print-severity  yes;
+                print-time              yes;
+        };
+        channel security_info {
+                file "/var/log/bind/security.log" versions 10 size 10M;
+                severity dynamic;
+                print-severity  yes;
+                print-time              yes;
+        };
+        channel default_log {
+                file "/var/log/bind/general.log" versions 10 size 10M;
+                severity dynamic;
+                print-category  yes;
+                print-severity  yes;
+                print-time              yes;
+        };
+
+        category default { default_log; };
+        category update { update_debug; };
+        category update-security { update_debug; };
+        category security { security_info; };
+};
