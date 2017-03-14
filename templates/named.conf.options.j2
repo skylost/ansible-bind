@@ -4,7 +4,7 @@ options {
 
     directory "/var/cache/bind";
     listen-on port 53 { {{ ansible_default_ipv4.address }}; };
-    allow-notify { {{ bind_allow_hosts }} }
+    allow-notify { {{ bind_allow_hosts }} };
     allow-new-zones yes;
     dnssec-validation auto;
     auth-nxdomain no;
