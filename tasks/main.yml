@@ -47,7 +47,7 @@
 - name: Update named options
   template:
     src: named.conf.options.j2
-    dest: /etc/bind/named.conf.options
+    dest: "{{ bind_config_path }}"
     owner: "{{ bind_user }}"
     group: "{{ bind_user }}"
   register: bind_setup
