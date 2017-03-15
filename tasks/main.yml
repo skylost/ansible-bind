@@ -13,19 +13,22 @@
   with_items: rpm_packages
   when: ansible_os_family == "RedHat"
 
+- name: Add log directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: bind
+    group: bind
+    mode: 0755
+  with_items:
+    - /var/log/bind
+    - /etc/bind
+
 - name: Update named options
   template:
     src: named.conf.options.j2
     dest: /etc/bind/named.conf.options
   register: bind_setup
-
-- name: Add log directory
-  file:
-    path: /var/log/bind
-    state: directory
-    owner: bind
-    group: bind
-    mode: 0755
 
 - name: Update rndc key
   template:
