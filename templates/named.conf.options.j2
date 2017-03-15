@@ -5,7 +5,7 @@ options {
     directory "{{ bind_run_dir }}";
     managed-keys-directory "{{ bind_run_dir }}/dynamic";
     listen-on port 53 { {{ ansible_default_ipv4.address }}; };
-    allow-notify { {{ bind_allow_hosts }} };
+    allow-notify { {{ bind_allow_hosts }}; };
     allow-new-zones yes;
     dnssec-validation auto;
     auth-nxdomain no;
