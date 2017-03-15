@@ -5,8 +5,8 @@
     bind_packages: "{{ rpm_packages }}"
     bind_config_path: "{{ rpm_config_path }}"
     bind_config_dir: "{{ rpm_config_dir }}"
-    bind_run_path: "{{ rpm_run_path }}"
-    bind_log_path: "{{ rpm_log_path }}"
+    bind_run_dir: "{{ rpm_run_dir }}"
+    bind_log_dir: "{{ rpm_log_dir }}"
   when: ansible_os_family == "RedHat"
 
 - set_fact:
@@ -15,8 +15,8 @@
     bind_packages: "{{ deb_packages }}"
     bind_config_path: "{{ deb_config_path }}"
     bind_config_dir: "{{ deb_config_dir }}"
-    bind_run_path: "{{ deb_run_path }}"
-    bind_log_path: "{{ deb_log_path }}"
+    bind_run_dir: "{{ deb_run_dir }}"
+    bind_log_dir: "{{ deb_log_dir }}"
   when: ansible_os_family == "Debian"
 
 - name: bind | Install deb packages
@@ -47,15 +47,14 @@
     group: "{{ bind_user }}"
     mode: 0755
   with_items:
-    - "{{ bind_config_path }}"
     - "{{ bind_config_dir }}"
-    - "{{ bind_run_path }}"
-    - "{{ bind_log_path }}"
+    - "{{ bind_run_dir }}"
+    - "{{ bind_log_dir }}"
 
 - name: bind | Update named options
   template:
     src: named.conf.options.j2
-    dest: "{{ bind_config_path }}"
+    dest: "{{ bind_config_dir }}"
     owner: "{{ bind_user }}"
     group: "{{ bind_user }}"
   register: bind_setup

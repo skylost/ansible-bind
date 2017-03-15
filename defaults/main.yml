@@ -24,9 +24,9 @@ deb_config_dir: /etc/bind
 rpm_config_path: /etc/named.conf
 deb_config_path: /etc/named.conf.options
 
-rpm_run_path: /var/named
-deb_run_path: /var/cache/bind
+rpm_run_dir: /var/named
+deb_run_dir: /var/cache/bind
 
-rpm_log_path: /var/log/named
-deb_log_path: /var/log/bind
+rpm_log_dir: /var/log/named
+deb_log_dir: /var/log/bind
 
