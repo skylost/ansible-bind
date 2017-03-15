@@ -1,8 +1,8 @@
-include "/etc/bind/rndc.key";
+include "{{ bind_config_dir }}/rndc.key";
 
 options {
 
-    directory "/var/cache/bind";
+    directory "{{ bind_run_dir }}";
     listen-on port 53 { {{ ansible_default_ipv4.address }}; };
     allow-notify { {{ bind_allow_hosts }} };
     allow-new-zones yes;
@@ -19,19 +19,19 @@ controls {
 
 logging {
         channel update_debug {
-                file "/var/log/bind/updates.log" versions 10 size 10M;
+                file "{{ bind_log_dir }}/updates.log" versions 10 size 10M;
                 severity dynamic;
                 print-severity  yes;
                 print-time              yes;
         };
         channel security_info {
-                file "/var/log/bind/security.log" versions 10 size 10M;
+                file "{{ bind_log_dir }}/security.log" versions 10 size 10M;
                 severity dynamic;
                 print-severity  yes;
                 print-time              yes;
         };
         channel default_log {
-                file "/var/log/bind/general.log" versions 10 size 10M;
+                file "{{ bind_log_dir }}/general.log" versions 10 size 10M;
                 severity dynamic;
                 print-category  yes;
                 print-severity  yes;

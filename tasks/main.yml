@@ -4,6 +4,9 @@
     bind_user: "{{ rpm_user_name }}"
     bind_packages: "{{ rpm_packages }}"
     bind_config_path: "{{ rpm_config_path }}"
+    bind_config_dir: "{{ rpm_config_dir }}"
+    bind_run_path: "{{ rpm_run_path }}"
+    bind_log_path: "{{ rpm_log_path }}"
   when: ansible_os_family == "RedHat"
 
 - set_fact:
@@ -11,6 +14,9 @@
     bind_user: "{{ deb_user_name }}"
     bind_packages: "{{ deb_packages }}"
     bind_config_path: "{{ deb_config_path }}"
+    bind_config_dir: "{{ deb_config_dir }}"
+    bind_run_path: "{{ deb_run_path }}"
+    bind_log_path: "{{ deb_log_path }}"
   when: ansible_os_family == "Debian"
 
 - name: bind | Install deb packages
@@ -33,7 +39,7 @@
     shell: /bin/true
     state: present
 
-- name: Add log directory
+- name: bind | Create directories
   file:
     path: "{{ item }}"
     state: directory
@@ -41,10 +47,12 @@
     group: "{{ bind_user }}"
     mode: 0755
   with_items:
-    - /var/log/bind
-    - /etc/bind
+    - "{{ bind_config_path }}"
+    - "{{ bind_config_dir }}"
+    - "{{ bind_run_path }}"
+    - "{{ bind_log_path }}"
 
-- name: Update named options
+- name: bind | Update named options
   template:
     src: named.conf.options.j2
     dest: "{{ bind_config_path }}"
@@ -55,7 +63,7 @@
 - name: Update rndc key
   template:
     src: rndc.key.j2
-    dest: /etc/bind/rndc.key
+    dest: "{{ bind_config_dir }}/rndc.key"
     mode: 0644
     owner: "{{ bind_user }}"
     group: "{{ bind_user }}"

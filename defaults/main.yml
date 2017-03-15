@@ -18,5 +18,15 @@ deb_service_name: bind9
 rpm_user_name: named
 deb_user_name: bind
 
+rpm_config_dir: /etc/named
+deb_config_dir: /etc/bind
+
 rpm_config_path: /etc/named.conf
 deb_config_path: /etc/named.conf.options
+
+rpm_run_path: /var/named
+deb_run_path: /var/cache/bind
+
+rpm_log_path: /var/log/named
+deb_log_path: /var/log/bind
+
