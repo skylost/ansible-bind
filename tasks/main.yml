@@ -1,12 +1,17 @@
 ---
-- name: bind | Install packages
+- name: bind | Install deb packages
   package:
     pkg:  "{{ item }}"
     state: installed
-  with_items:
-    - bind9
-    - bind9utils
-    - dnsutils
+  with_items: deb_packages
+  when: ansible_os_family == "Debian"
+
+- name: bind | Install rpm packages
+  package:
+    pkg:  "{{ item }}"
+    state: installed
+  with_items: rpm_packages
+  when: ansible_os_family == "RedHat"
 
 - name: Update named options
   template:

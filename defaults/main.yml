@@ -2,3 +2,12 @@
 bind_tsig: XXXXXXXXXXXXXXXX
 
 bind_allow_hosts: "192.168.1.10:5354; 192.168.1.11:5354; 192/168.1.12:5354"
+
+rpm_packages:
+  - bind
+  - bind-utils
+
+deb_packages:
+  - bind9
+  - bind9utils
+  - dnsutils
