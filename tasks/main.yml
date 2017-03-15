@@ -3,12 +3,14 @@
     bind_service_name: "{{ rpm_service_name }}"
     bind_user: "{{ rpm_user_name }}"
     bind_packages: "{{ rpm_packages }}"
+    bind_config_path: "{{ rpm_config_path }}"
   when: ansible_os_family == "RedHat"
 
 - set_fact:
     bind_service_name: "{{ deb_service_name }}"
     bind_user: "{{ deb_user_name }}"
     bind_packages: "{{ deb_packages }}"
+    bind_config_path: "{{ deb_config_path }}"
   when: ansible_os_family == "Debian"
 
 - name: bind | Install deb packages

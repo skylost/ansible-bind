@@ -17,3 +17,6 @@ deb_service_name: bind9
 
 rpm_user_name: named
 deb_user_name: bind
+
+rpm_config_path: /etc/named.conf
+deb_config_path: /etc/named.conf.options
