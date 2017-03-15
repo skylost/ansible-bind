@@ -15,4 +15,5 @@ deb_packages:
 rpm_service_name: named
 deb_service_name: bind9
 
-bind_user: bind
+rpm_user_name: named
+deb_user_name: bind

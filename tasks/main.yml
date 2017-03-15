@@ -1,11 +1,13 @@
 ---
 - set_fact:
     bind_service_name: "{{ rpm_service_name }}"
+    bind_user: "{{ rpm_user_name }}"
     bind_packages: "{{ rpm_packages }}"
   when: ansible_os_family == "RedHat"
 
 - set_fact:
     bind_service_name: "{{ deb_service_name }}"
+    bind_user: "{{ deb_user_name }}"
     bind_packages: "{{ deb_packages }}"
   when: ansible_os_family == "Debian"
 
