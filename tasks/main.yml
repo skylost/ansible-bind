@@ -54,7 +54,7 @@
 - name: bind | Update named options
   template:
     src: named.conf.options.j2
-    dest: "{{ bind_config_dir }}"
+    dest: "{{ bind_config_path }}"
     owner: "{{ bind_user }}"
     group: "{{ bind_user }}"
   register: bind_setup
