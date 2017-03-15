@@ -11,3 +11,8 @@ deb_packages:
   - bind9
   - bind9utils
   - dnsutils
+
+rpm_service_name: named
+deb_service_name: bind9
+
+bind_user: bind

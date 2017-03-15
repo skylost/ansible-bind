@@ -1,24 +1,40 @@
 ---
+- set_fact:
+    bind_service_name: "{{ rpm_service_name }}"
+    bind_packages: "{{ rpm_packages }}"
+  when: ansible_os_family == "RedHat"
+
+- set_fact:
+    bind_service_name: "{{ deb_service_name }}"
+    bind_packages: "{{ deb_packages }}"
+  when: ansible_os_family == "Debian"
+
 - name: bind | Install deb packages
   package:
     pkg:  "{{ item }}"
     state: installed
-  with_items: deb_packages
-  when: ansible_os_family == "Debian"
+  with_items: bind_packages
 
-- name: bind | Install rpm packages
-  package:
-    pkg:  "{{ item }}"
-    state: installed
-  with_items: rpm_packages
-  when: ansible_os_family == "RedHat"
+- name: bind | Add bind user
+  group:
+    name: "{{ bind_user }}"
+    state: present
+
+- name: bind | Add bind group
+  user:
+    name: "{{ bind_user }}"
+    group: "{{ bind_user }}"
+    createhome: no
+    home: /tmp
+    shell: /bin/true
+    state: present
 
 - name: Add log directory
   file:
     path: "{{ item }}"
     state: directory
-    owner: bind
-    group: bind
+    owner: "{{ bind_user }}"
+    group: "{{ bind_user }}"
     mode: 0755
   with_items:
     - /var/log/bind
@@ -28,6 +44,8 @@
   template:
     src: named.conf.options.j2
     dest: /etc/bind/named.conf.options
+    owner: "{{ bind_user }}"
+    group: "{{ bind_user }}"
   register: bind_setup
 
 - name: Update rndc key
@@ -35,16 +53,18 @@
     src: rndc.key.j2
     dest: /etc/bind/rndc.key
     mode: 0644
+    owner: "{{ bind_user }}"
+    group: "{{ bind_user }}"
+
 
 - name: Enable bind systemd
   service:
-    name: bind9
+    name: "{{ bind_service_name }}"
     state: started
     enabled: yes
 
 - name: Restart bind when config changed
   service:
-    name: bind9
+    name: "{{ bind_service_name }}"
     state: restarted
   when: bind_setup.changed
-
