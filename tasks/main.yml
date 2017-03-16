@@ -1,5 +1,6 @@
 ---
-- set_fact:
+- name: bind | Set rpm facts
+  set_fact:
     bind_service_name: "{{ rpm_service_name }}"
     bind_user: "{{ rpm_user_name }}"
     bind_packages: "{{ rpm_packages }}"
@@ -7,9 +8,11 @@
     bind_config_dir: "{{ rpm_config_dir }}"
     bind_run_dir: "{{ rpm_run_dir }}"
     bind_log_dir: "{{ rpm_log_dir }}"
+    disable_selinux: true
   when: ansible_os_family == "RedHat"
 
-- set_fact:
+- name: bind | Set deb facts
+  set_fact:
     bind_service_name: "{{ deb_service_name }}"
     bind_user: "{{ deb_user_name }}"
     bind_packages: "{{ deb_packages }}"
@@ -17,6 +20,7 @@
     bind_config_dir: "{{ deb_config_dir }}"
     bind_run_dir: "{{ deb_run_dir }}"
     bind_log_dir: "{{ deb_log_dir }}"
+    disable_selinux: false
   when: ansible_os_family == "Debian"
 
 - name: bind | Install deb packages
@@ -59,7 +63,7 @@
     group: "{{ bind_user }}"
   register: bind_setup
 
-- name: Update rndc key
+- name: bind | Update rndc key
   template:
     src: rndc.key.j2
     dest: "{{ bind_config_dir }}/rndc.key"
@@ -67,14 +71,18 @@
     owner: "{{ bind_user }}"
     group: "{{ bind_user }}"
 
+- name: bind | disable Selinux
+  selinux:
+    state: disabled
+  when: disable_selinux
 
-- name: Enable bind systemd
+- name: bind | Enable bind systemd
   service:
     name: "{{ bind_service_name }}"
     state: started
     enabled: yes
 
-- name: Restart bind when config changed
+- name: bind | Restart bind when config changed
   service:
     name: "{{ bind_service_name }}"
     state: restarted
