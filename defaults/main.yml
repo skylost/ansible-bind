@@ -2,3 +2,31 @@
 bind_tsig: XXXXXXXXXXXXXXXX
 
 bind_allow_hosts: "192.168.1.10:5354; 192.168.1.11:5354; 192/168.1.12:5354"
+
+rpm_packages:
+  - bind
+  - bind-utils
+
+deb_packages:
+  - bind9
+  - bind9utils
+  - dnsutils
+
+rpm_service_name: named
+deb_service_name: bind9
+
+rpm_user_name: named
+deb_user_name: bind
+
+rpm_config_dir: /etc/named
+deb_config_dir: /etc/bind
+
+rpm_config_path: /etc/named.conf
+deb_config_path: /etc/named.conf.options
+
+rpm_run_dir: /var/named
+deb_run_dir: /var/cache/bind
+
+rpm_log_dir: /var/log/named
+deb_log_dir: /var/log/bind
+
